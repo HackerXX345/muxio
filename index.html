@@ -1921,8 +1921,11 @@
                         </select>
                     </div>
                     <div>
-                        <label class="control-lbl" data-i18n="year_label">Year (optional)</label>
-                        <input class="premium-input" id="roulette-year" type="number" data-i18n-placeholder="any_year" placeholder="Any year" min="1950" max="2026">
+                        <label class="control-lbl" data-i18n="year_label">Years (optional)</label>
+                        <div style="display:flex;gap:8px;">
+                            <input class="premium-input" id="roulette-year-from" type="number" data-i18n-placeholder="year_from" placeholder="From" min="1900" max="2026" style="width:100%;">
+                            <input class="premium-input" id="roulette-year-to" type="number" data-i18n-placeholder="year_to" placeholder="To" min="1900" max="2026" style="width:100%;">
+                        </div>
                     </div>
                     <div>
                         <label class="control-lbl" data-i18n="rating_label">Min. rating</label>
@@ -2245,8 +2248,10 @@
                 genre_horror: 'Horror',
                 genre_scifi: 'Sci-Fi',
                 genre_thriller: 'Thriller',
-                year_label: 'Year (optional)',
+                year_label: 'Years (optional)',
                 any_year: 'Any year',
+                year_from: 'From',
+                year_to: 'To',
                 skip_link: 'Skip to content',
                 rating_label: 'Min. rating',
                 any_rating: 'Any rating',
@@ -2348,8 +2353,10 @@
                 genre_horror: 'Horor',
                 genre_scifi: 'Naučna fantastika',
                 genre_thriller: 'Triler',
-                year_label: 'Godina (opciono)',
+                year_label: 'Godine (opciono)',
                 any_year: 'Bilo koja godina',
+                year_from: 'Od',
+                year_to: 'Do',
                 skip_link: 'Preskoči na sadržaj',
                 rating_label: 'Min. ocena',
                 any_rating: 'Bilo koja ocena',
@@ -3452,7 +3459,8 @@
         async function spinRoulette() {
             const media = document.getElementById('roulette-media').value;
             const genre = document.getElementById('roulette-genre').value;
-            const year = document.getElementById('roulette-year').value.trim();
+            const yearFrom = document.getElementById('roulette-year-from').value.trim();
+            const yearTo = document.getElementById('roulette-year-to').value.trim();
             const minRating = document.getElementById('roulette-rating').value;
             const btn = document.getElementById('spin-button');
             const ldr = document.getElementById('roulette-loader');
@@ -3475,8 +3483,12 @@
             if (targetType === 'tv') { if (genre === '28') adjustedGenre = '10759'; if (genre === '878') adjustedGenre =
                     '10765'; }
             if (adjustedGenre !== 'any') params.with_genres = adjustedGenre;
-            if (year) { if (targetType === 'movie') params.primary_release_year = year;
-                else params.first_air_date_year = year; }
+            let yf = /^\d{4}$/.test(yearFrom) ? parseInt(yearFrom) : null;
+            let yt = /^\d{4}$/.test(yearTo) ? parseInt(yearTo) : null;
+            if (yf && yt && yf > yt) { const swap = yf; yf = yt; yt = swap; }
+            const dateField = targetType === 'movie' ? 'primary_release_date' : 'first_air_date';
+            if (yf) params[dateField + '.gte'] = `${yf}-01-01`;
+            if (yt) params[dateField + '.lte'] = `${yt}-12-31`;
             if (minRating !== 'any') params['vote_average.gte'] = minRating;
 
             const indexSet = await tmdb(`/discover/${targetType}`, params);
