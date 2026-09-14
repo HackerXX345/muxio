@@ -2125,8 +2125,8 @@
         // ─── SOURCES ──────────────────────────────────────────
         const SOURCES = [
     
-    { name: 'VidCore', movie: id => `https://vidcore.net/movie/${id}`, tv: (id, s, e) =>
-            `https://vidcore.net/tv/${id}/${s}/${e}` },
+    { name: 'VidCore', movie: id => `https://vidcore.io/movie/${id}`, tv: (id, s, e) =>
+            `https://vidcore.io/tv/${id}/${s}/${e}` },
             { 
         name: 'VidLink', 
         movie: id => `https://vidlink.pro/movie/${id}`, 
@@ -2138,7 +2138,23 @@
     { name: 'VidSrc', movie: id => `https://vidsrc.to/embed/movie/${id}`, tv: (id, s, e) =>
             `https://vidsrc.to/embed/tv/${id}/${s}/${e}` },
     { name: '2Embed', movie: id => `https://www.2embed.cc/embed/${id}`, tv: (id, s, e) =>
-            `https://www.2embed.cc/embedtv/${id}&s=${s}&e=${e}` }
+            `https://www.2embed.cc/embedtv/${id}&s=${s}&e=${e}` },
+    { name: 'SuperEmbed', movie: id => `https://multiembed.mov/?video_id=${id}&tmdb=1`, tv: (id, s, e) =>
+            `https://multiembed.mov/?video_id=${id}&tmdb=1&s=${s}&e=${e}` },
+    { name: 'Videasy', movie: id => `https://player.videasy.net/movie/${id}`, tv: (id, s, e) =>
+            `https://player.videasy.net/tv/${id}/${s}/${e}` },
+    { name: 'Vidfast', movie: id => `https://vidfast.pro/movie/${id}`, tv: (id, s, e) =>
+            `https://vidfast.pro/tv/${id}/${s}/${e}` },
+    { name: '111Movies', movie: id => `https://111movies.net/movie/${id}`, tv: (id, s, e) =>
+            `https://111movies.net/tv/${id}/${s}/${e}` },
+    { name: 'YapGrid', movie: id => `https://yapgrid.com/embed/movie/${id}`, tv: (id, s, e) =>
+            `https://yapgrid.com/embed/tv/${id}/${s}/${e}` },
+    { name: 'VIDEM', movie: id => `https://videm.xyz/embed/movie/${id}`, tv: (id, s, e) =>
+            `https://videm.xyz/embed/tv/${id}/${s}/${e}` },
+    { name: 'AutoEmbed', movie: id => `https://autoembed.co/movie/tmdb/${id}`, tv: (id, s, e) =>
+            `https://autoembed.co/tv/tmdb/${id}-${s}-${e}` },
+    { name: 'Flixer', movie: id => `https://flixer.su/watch/movie/${id}`, tv: (id, s, e) =>
+            `https://flixer.su/watch/tv/${id}/${s}/${e}` }
 ];
 
         // ─── TRANSLATIONS ──────────────────────────────────────
