@@ -2082,6 +2082,353 @@
                 transition-duration: 0.01ms !important;
             }
         }
+
+        /* ═══ MUXIO V2 — clean, mobile-first ═══ */
+        :root {
+            --tabbar-h: 64px;
+        }
+
+        /* ── mobile tab bar ── */
+        #tabbar {
+            display: none;
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 1000;
+            padding: 6px 8px calc(6px + env(safe-area-inset-bottom));
+            background: rgba(10, 11, 19, 0.92);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border-top: 1px solid rgba(255, 255, 255, 0.07);
+        }
+        .tabbar-link {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 3px;
+            padding: 7px 4px 5px;
+            background: none;
+            border: none;
+            border-radius: 12px;
+            color: var(--muted);
+            font-family: 'Inter', sans-serif;
+            font-size: 10.5px;
+            font-weight: 600;
+            cursor: pointer;
+            min-height: 52px;
+        }
+        .tabbar-link svg {
+            width: 22px;
+            height: 22px;
+        }
+        .tabbar-link.active {
+            color: var(--gold2);
+        }
+        .tabbar-link:active {
+            transform: scale(0.96);
+        }
+
+        /* ── hero: true billboard ── */
+        #hero {
+            min-height: min(78vh, 640px);
+            display: flex;
+            align-items: flex-end;
+        }
+        #hero-bg {
+            filter: saturate(1.1);
+        }
+        #hero-bg::after {
+            background:
+                linear-gradient(to top, var(--bg) 4%, rgba(9, 10, 17, 0.55) 40%, rgba(9, 10, 17, 0.15) 70%, rgba(9, 10, 17, 0.35) 100%),
+                linear-gradient(to right, rgba(9, 10, 17, 0.85) 0%, rgba(9, 10, 17, 0.25) 55%, transparent 100%) !important;
+        }
+        .hero-content {
+            padding-bottom: 44px;
+            max-width: 640px;
+        }
+        .hero-title {
+            font-size: clamp(38px, 7vw, 68px);
+            line-height: 0.95;
+            text-wrap: balance;
+            text-shadow: 0 4px 30px rgba(0, 0, 0, 0.8);
+        }
+        .hero-desc {
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-shadow: 0 2px 12px rgba(0, 0, 0, 0.9);
+        }
+        .hero-actions .btn {
+            min-height: 46px;
+        }
+
+        /* ── rails: peek, fade, no bars ── */
+        .carousel {
+            scrollbar-width: none;
+            padding: 4px 24px 14px;
+            scroll-padding: 0 24px;
+            -webkit-mask-image: linear-gradient(to right, #000 96%, transparent 100%);
+            mask-image: linear-gradient(to right, #000 96%, transparent 100%);
+        }
+        .carousel::-webkit-scrollbar {
+            display: none;
+        }
+        .section-header {
+            padding: 0 24px;
+        }
+
+        /* ── cards: badges + hover play ── */
+        .card {
+            position: relative;
+        }
+        .card-rating {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: rgba(0, 0, 0, 0.55);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 999px;
+            padding: 2px 8px;
+            font-weight: 700;
+            color: var(--gold2);
+        }
+        .card-img {
+            background: linear-gradient(110deg, var(--surface2) 30%, var(--surface3) 45%, var(--surface2) 60%);
+            background-size: 200% 100%;
+            animation: cardShimmer 1.6s linear infinite;
+        }
+        .card-img[src]:not([src=""]) {
+            animation: none;
+        }
+        @keyframes cardShimmer {
+            to { background-position: -200% 0; }
+        }
+        @media (hover: hover) {
+            .card-img-wrapper {
+                position: relative;
+            }
+            .card-img-wrapper::after {
+                content: '▶';
+                position: absolute;
+                inset: 0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 30px;
+                color: #fff;
+                background: rgba(5, 6, 12, 0.45);
+                opacity: 0;
+                transition: opacity 0.2s ease;
+                pointer-events: none;
+            }
+            .card:hover .card-img-wrapper::after {
+                opacity: 1;
+            }
+        }
+        .watchlist-btn {
+            min-width: 32px;
+            min-height: 32px;
+        }
+
+        /* ── touch targets + type ── */
+        .btn, .tab-btn, .source-btn, .src-nav, .src-tool,
+        .premium-select, .premium-input, .settings-select, .ep-item {
+            min-height: 40px;
+        }
+        .section-title {
+            font-size: clamp(19px, 2.6vw, 24px);
+        }
+
+        /* ── player mobile ── */
+        .ep-list {
+            scrollbar-width: thin;
+        }
+
+        /* ── modal as bottom sheet on mobile ── */
+        @media (max-width: 760px) {
+            #tabbar {
+                display: flex;
+            }
+            body {
+                padding-bottom: var(--tabbar-h);
+            }
+            .nav-links {
+                display: none;
+            }
+            .page {
+                padding-top: 112px;
+            }
+            #hero {
+                min-height: 62vh;
+            }
+            .hero-content {
+                padding-bottom: 28px;
+            }
+            .hero-actions {
+                display: flex;
+                gap: 10px;
+            }
+            .hero-actions .btn {
+                flex: 1;
+                justify-content: center;
+            }
+            .carousel {
+                padding: 4px 12px 12px;
+                scroll-padding: 0 12px;
+            }
+            .section-header {
+                padding: 0 12px;
+            }
+            .results-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 10px;
+                padding: 0 12px;
+            }
+            .card-info {
+                padding: 8px 8px 10px;
+            }
+            .card-title {
+                font-size: 12px;
+            }
+            .modal-overlay {
+                align-items: flex-end;
+            }
+            .modal {
+                width: 100%;
+                max-width: none;
+                border-radius: 20px 20px 0 0;
+                max-height: 88vh;
+                overflow-y: auto;
+            }
+            .ep-list {
+                display: flex;
+                overflow-x: auto;
+                gap: 8px;
+                padding-bottom: 6px;
+                max-height: none;
+            }
+            .ep-item {
+                flex: 0 0 auto;
+                min-width: 64px;
+                justify-content: center;
+            }
+            #toast {
+                bottom: calc(var(--tabbar-h) + 16px);
+            }
+        }
+
+        /* ═══ MUXIO V3 — prebuilt component language (daisyUI-grade) ═══ */
+        /* ambient glow (Vengeance-style) */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            pointer-events: none;
+            background:
+                radial-gradient(600px 320px at 12% -4%, rgba(220, 165, 67, 0.07), transparent 70%),
+                radial-gradient(700px 380px at 88% 0%, rgba(80, 100, 220, 0.06), transparent 70%),
+                radial-gradient(500px 300px at 50% 110%, rgba(220, 165, 67, 0.04), transparent 70%);
+        }
+
+        /* skeleton rails (daisyUI skeleton language) */
+        .skel-rail {
+            display: flex;
+            gap: 14px;
+            overflow: hidden;
+            width: 100%;
+            padding: 4px 2px;
+        }
+        .skel-card {
+            flex: 0 0 150px;
+            height: 225px;
+            border-radius: var(--r-lg);
+            background: linear-gradient(110deg, var(--surface2) 30%, var(--surface3) 48%, var(--surface2) 62%);
+            background-size: 200% 100%;
+            animation: cardShimmer 1.4s linear infinite;
+        }
+        @media (max-width: 760px) {
+            .skel-card {
+                flex-basis: 110px;
+                height: 165px;
+            }
+        }
+
+        /* image fade-in over shimmer */
+        .card-img, .continue-img {
+            opacity: 0;
+            transition: opacity 0.45s ease;
+        }
+        .card-img.ld, .continue-img.ld {
+            opacity: 1;
+            animation: none;
+            background: var(--surface2);
+        }
+
+        /* staggered card entrances */
+        @keyframes cardIn {
+            from { opacity: 0; transform: translateY(14px) scale(0.98); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        .results-grid .card, .carousel .card {
+            animation: cardIn 0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
+        }
+        .results-grid .card:nth-child(2), .carousel .card:nth-child(2) { animation-delay: 0.03s; }
+        .results-grid .card:nth-child(3), .carousel .card:nth-child(3) { animation-delay: 0.06s; }
+        .results-grid .card:nth-child(4), .carousel .card:nth-child(4) { animation-delay: 0.09s; }
+        .results-grid .card:nth-child(5), .carousel .card:nth-child(5) { animation-delay: 0.12s; }
+        .results-grid .card:nth-child(6), .carousel .card:nth-child(6) { animation-delay: 0.15s; }
+        .results-grid .card:nth-child(n+7), .carousel .card:nth-child(n+7) { animation-delay: 0.18s; }
+        .card-title {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            min-height: 2.5em;
+            line-height: 1.25;
+        }
+
+        /* modal pop (Framer-style spring lite) */
+        @keyframes modalPop {
+            from { opacity: 0; transform: translateY(10px) scale(0.97); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        .modal {
+            animation: modalPop 0.22s ease-out;
+        }
+
+        /* tabbar active indicator (daisyUI btm-nav language) */
+        .tabbar-link {
+            position: relative;
+        }
+        .tabbar-link.active::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            width: 22px;
+            height: 3px;
+            border-radius: 99px;
+            background: var(--gold);
+        }
+
+        /* 44px touch targets on player tools */
+        .src-nav, .src-tool {
+            min-width: 42px;
+            height: 42px;
+        }
+        .src-nav {
+            font-size: 20px;
+        }
+
+        /* spotlight glass */
+        .spotlight-panel {
+            border: var(--border);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
     </style>
 </head>
 <body>
@@ -2139,6 +2486,26 @@
         </div>
     </nav>
 
+    <!-- ===== MOBILE TAB BAR ===== -->
+    <nav id="tabbar" aria-label="Primary">
+        <button class="tabbar-link active" onclick="navigateTo('home')" aria-label="Home">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5 12 3l9 6.5V20a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/></svg>
+            <span data-i18n="nav_home">Home</span>
+        </button>
+        <button class="tabbar-link" onclick="navigateTo('roulette')" aria-label="Roulette">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="4"/><circle cx="8.5" cy="8.5" r="1.4" fill="currentColor" stroke="none"/><circle cx="15.5" cy="15.5" r="1.4" fill="currentColor" stroke="none"/><circle cx="15.5" cy="8.5" r="1.4" fill="currentColor" stroke="none"/><circle cx="8.5" cy="15.5" r="1.4" fill="currentColor" stroke="none"/></svg>
+            <span data-i18n="nav_roulette">Roulette</span>
+        </button>
+        <button class="tabbar-link" onclick="navigateTo('watchlist')" aria-label="Watchlist">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4-7 4V4a1 1 0 0 1 1-1z"/></svg>
+            <span data-i18n="nav_watchlist">Watchlist</span>
+        </button>
+        <button class="tabbar-link" onclick="navigateTo('settings')" aria-label="Settings">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.9 2.9l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.2a1.7 1.7 0 0 0-1-1.5 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.9-2.9l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.2a1.7 1.7 0 0 0 1.5-1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.9-2.9l.1.1a1.7 1.7 0 0 0 1.9.3h.1a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.2a1.7 1.7 0 0 0 1 1.5h.1a1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.9 2.9l-.1.1a1.7 1.7 0 0 0-.3 1.9v.1a1.7 1.7 0 0 0 1.5 1h.2a2 2 0 1 1 0 4h-.2a1.7 1.7 0 0 0-1.5 1z"/></svg>
+            <span data-i18n="settings_title">Settings</span>
+        </button>
+    </nav>
+
     <!-- ===== HOME ===== -->
     <div id="home-page" class="page active">
         <div id="hero">
@@ -2173,7 +2540,7 @@
 
         <div class="section">
             <div class="section-header"><div class="section-title" data-i18n="hidden_gems">Hidden <span>Gems</span></div></div>
-            <div id="gems-loading" class="loader"><div class="spinner"></div></div>
+            <div id="gems-loading" class="loader"><div class="skel-rail" aria-hidden="true"><div class="skel-card"></div><div class="skel-card"></div><div class="skel-card"></div><div class="skel-card"></div><div class="skel-card"></div><div class="skel-card"></div></div></div>
             <div class="carousel" id="hidden-gems"></div>
         </div>
 
@@ -2185,19 +2552,19 @@
                     <span data-i18n="refresh">Refresh</span>
                 </span>
             </div>
-            <div id="random-loading" class="loader"><div class="spinner"></div></div>
+            <div id="random-loading" class="loader"><div class="skel-rail" aria-hidden="true"><div class="skel-card"></div><div class="skel-card"></div><div class="skel-card"></div><div class="skel-card"></div><div class="skel-card"></div><div class="skel-card"></div></div></div>
             <div class="carousel" id="random-discovery"></div>
         </div>
 
         <div class="section">
             <div class="section-header"><div class="section-title" data-i18n="popular_week">Popular <span>This Week</span></div></div>
-            <div id="popular-loading" class="loader"><div class="spinner"></div></div>
+            <div id="popular-loading" class="loader"><div class="skel-rail" aria-hidden="true"><div class="skel-card"></div><div class="skel-card"></div><div class="skel-card"></div><div class="skel-card"></div><div class="skel-card"></div><div class="skel-card"></div></div></div>
             <div class="carousel" id="popular-week"></div>
         </div>
 
         <div id="recommendation-section" class="section">
             <div class="section-header"><div class="section-title" data-i18n="because_watched">Because You <span>Watched</span></div></div>
-            <div id="rec-loading" class="loader"><div class="spinner"></div></div>
+            <div id="rec-loading" class="loader"><div class="skel-rail" aria-hidden="true"><div class="skel-card"></div><div class="skel-card"></div><div class="skel-card"></div><div class="skel-card"></div><div class="skel-card"></div><div class="skel-card"></div></div></div>
             <div class="carousel" id="because-watched"></div>
         </div>
 
@@ -2212,7 +2579,7 @@
                 </div>
             </div>
             <div class="genres" id="catalog-genres" style="margin-bottom:16px;"></div>
-            <div id="catalog-loader" class="loader" style="display:none;"><div class="spinner"></div></div>
+            <div id="catalog-loader" class="loader" style="display:none;"><div class="skel-rail" aria-hidden="true"><div class="skel-card"></div><div class="skel-card"></div><div class="skel-card"></div><div class="skel-card"></div><div class="skel-card"></div><div class="skel-card"></div></div></div>
             <div class="results-grid" id="catalog-grid" style="padding:0;"></div>
         </div>
     </div>
@@ -2225,7 +2592,7 @@
             <button class="tab-btn" data-i18n="series" onclick="setSearchType('tv')">Series</button>
         </div>
         <div class="results-meta" id="search-meta"></div>
-        <div id="search-loader" class="loader" style="display:none;"><div class="spinner"></div></div>
+        <div id="search-loader" class="loader" style="display:none;"><div class="skel-rail" aria-hidden="true"><div class="skel-card"></div><div class="skel-card"></div><div class="skel-card"></div><div class="skel-card"></div><div class="skel-card"></div><div class="skel-card"></div></div></div>
         <div class="results-grid" id="search-results"></div>
     </div>
 
@@ -3081,10 +3448,13 @@
             }
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+            document.querySelectorAll('.tabbar-link').forEach(l => l.classList.remove('active'));
             const el = document.getElementById(page + '-page');
             if (el) el.classList.add('active');
             const link = document.querySelector(`.nav-link[onclick*="'${page}'"]`);
             if (link) link.classList.add('active');
+            const tlink = document.querySelector(`.tabbar-link[onclick*="'${page}'"]`);
+            if (tlink) tlink.classList.add('active');
             window.scrollTo(0, 0);
             switch (page) {
                 case 'home':
@@ -3704,7 +4074,7 @@
 
             return `<div class="card" onclick="goToItem(${esc})">
             <div class="card-img-wrapper">
-              <img class="card-img" src="${poster}" alt="${title}" loading="lazy">
+              <img class="card-img" src="${poster}" alt="${title}" loading="lazy" onload="this.classList.add('ld')" onerror="this.classList.add('ld')">
               <button class="watchlist-btn ${inWatchlist ? 'added' : ''}" 
                       onclick="event.stopPropagation(); toggleWatchlistFromCard(${esc}, this)" 
                       aria-label="${inWatchlist ? 'Remove from watchlist' : 'Add to watchlist'}"
@@ -3755,7 +4125,7 @@
                 const key = `${r.media_type}_${r.tmdb_id}`;
                 const esc = JSON.stringify({ ...item, media_type: r.media_type }).replace(/"/g, '&quot;');
                 return `<div class="continue-card">
-              <img class="continue-img" src="${banner}" alt="${title}" loading="lazy">
+              <img class="continue-img" src="${banner}" alt="${title}" loading="lazy" onload="this.classList.add('ld')" onerror="this.classList.add('ld')">
               <button class="continue-remove" aria-label="Remove from history" onclick="removeProgressRecord(event,'${key}')">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:10px;height:10px;"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
               </button>
