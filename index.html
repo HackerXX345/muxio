@@ -3,7 +3,20 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Muxio — discover movies and series, track your watchlist and continue watching across devices." />
+    <meta name="theme-color" content="#08091A" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Muxio" />
+    <meta property="og:description" content="Discover movies and series, track your watchlist and continue watching across devices." />
+    <meta property="og:image" content="muxio_icon_v2.png" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="Muxio" />
+    <meta name="twitter:description" content="Discover movies and series, track your watchlist and continue watching across devices." />
+    <link rel="manifest" href="manifest.webmanifest" />
+    <link rel="apple-touch-icon" href="muxio_icon_v2.png" />
     <title>Muxio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 680 680'%3E%3Crect width='680' height='680' rx='120' fill='%2308091A'/%3E%3Cpolygon points='110,168 68,168 340,512 502,512' fill='%23E8EAFF'/%3E%3Ccircle cx='340' cy='370' r='105' fill='%23F5A623' opacity='0.12'/%3E%3Cpolygon points='304,316 304,424 406,370' fill='%23F5A623'/%3E%3C/svg%3E" />
     <style>
@@ -1735,12 +1748,14 @@
 </head>
 <body>
 
+    <style>.skip-link{position:fixed;top:-48px;left:12px;z-index:9999;background:var(--gold,#F5A623);color:#000;padding:10px 16px;border-radius:8px;font-weight:700;transition:top .2s;}.skip-link:focus{top:12px;}*:focus-visible{outline:2px solid var(--gold,#F5A623);outline-offset:2px;}</style>
+    <a href="#home-page" class="skip-link" data-i18n="skip_link">Skip to content</a>
     <!-- ===== LANGUAGE PICKER (first visit) ===== -->
     <div id="lang-picker-overlay">
         <div class="lang-picker-box">
             <div class="icon">🌍</div>
             <h2>Choose your language</h2>
-            <p>Select your preferred language to continue. You can change it anytime.</p>
+            <p>English is on by default — switch anytime.</p>
             <div class="lang-picker-options">
                 <button class="lang-picker-btn" onclick="pickLanguage('en')">
                     <span class="flag">🇬🇧</span>
@@ -1909,6 +1924,15 @@
                         <label class="control-lbl" data-i18n="year_label">Year (optional)</label>
                         <input class="premium-input" id="roulette-year" type="number" data-i18n-placeholder="any_year" placeholder="Any year" min="1950" max="2026">
                     </div>
+                    <div>
+                        <label class="control-lbl" data-i18n="rating_label">Min. rating</label>
+                        <select class="premium-select" id="roulette-rating">
+                            <option value="any" data-i18n="any_rating">Any rating</option>
+                            <option value="6">6+</option>
+                            <option value="7">7+</option>
+                            <option value="8">8+</option>
+                        </select>
+                    </div>
                 </div>
                 <button class="spin-action-btn" id="spin-button" onclick="spinRoulette()">
                     <span data-i18n="spin_discover">🎲 Spin & Discover</span>
@@ -1931,7 +1955,7 @@
     <div id="player-page" class="page">
         <div class="player-wrapper">
             <div class="player-header">
-                <div class="back-btn" onclick="window.history.back()">
+                <div class="back-btn" role="button" tabindex="0" aria-label="Back" onclick="window.history.back()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();window.history.back();}">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:16px;height:16px;"><polyline points="15 18 9 12 15 6"/></svg>
                 </div>
                 <div>
@@ -1941,12 +1965,13 @@
             </div>
             <div class="iframe-container">
                 <div id="video-loader" class="player-loading-overlay"><div class="spinner"></div><span style="font-size:12px;margin-top:8px;color:var(--muted);" data-i18n="finding_stream">Finding the best stream…</span></div>
-                <iframe id="player-iframe" allowfullscreen allow="fullscreen" referrerpolicy="no-referrer"></iframe>
+                <iframe id="player-iframe" allowfullscreen allow="fullscreen" referrerpolicy="no-referrer" sandbox="allow-scripts allow-same-origin allow-forms allow-presentation"></iframe>
             </div>
 
             <div class="player-controls">
                 <span class="source-label" data-i18n="stream_source">Stream source:</span>
-                <div id="source-buttons" style="display:flex;gap:6px;"></div>
+                <div id="source-buttons" style="display:flex;gap:6px;flex-wrap:wrap;"></div>
+                <button class="source-btn" id="report-btn" onclick="reportDeadSource()" data-i18n="report_source" title="Report dead source">⚠ Report</button>
             </div>
 
             <div class="player-details">
@@ -1992,7 +2017,7 @@
             <div class="section-header" style="margin-bottom:8px;">
                 <div class="section-title" data-i18n="settings_title"><span>Settings</span></div>
             </div>
-            <p style="color:var(--muted);font-size:14px;margin-bottom:24px;" data-i18n="settings_desc">Customize your CineVault experience.</p>
+            <p style="color:var(--muted);font-size:14px;margin-bottom:24px;" data-i18n="settings_desc">Customize your Muxio experience.</p>
 
             <div class="settings-card">
                 <div class="settings-card-title" data-i18n="playback_tracking">Playback &amp; Tracking</div>
@@ -2034,6 +2059,21 @@
                 </div>
             </div>
 
+            <div class="settings-card">
+                <div class="settings-card-title" data-i18n="data_title">Your Data</div>
+                <div class="setting-row" style="border-bottom:none;">
+                    <div>
+                        <div class="setting-label" data-i18n="data_title">Your Data</div>
+                        <div class="setting-desc" data-i18n="data_desc">Download or restore a backup of your settings, watchlist and progress.</div>
+                    </div>
+                    <div class="setting-control" style="display:flex;gap:8px;">
+                        <button class="btn btn-outline btn-sm" data-i18n="export_data" onclick="exportUserData()">Export</button>
+                        <button class="btn btn-outline btn-sm" data-i18n="import_data" onclick="document.getElementById('import-file').click()">Import</button>
+                        <input type="file" id="import-file" accept="application/json,.json" style="display:none" onchange="importUserData(event)">
+                    </div>
+                </div>
+            </div>
+
             <div class="settings-card" style="border-color:rgba(239,68,68,0.2);">
                 <div class="settings-card-title" style="color:var(--danger);" data-i18n="danger_zone">Danger Zone</div>
                 <div class="setting-row">
@@ -2060,9 +2100,9 @@
                 <div class="settings-card-title" data-i18n="about">About</div>
                 <div class="setting-row" style="border-bottom:none;">
                     <div>
-                        <div class="setting-label">CineVault</div>
+                        <div class="setting-label">Muxio</div>
                         <div class="setting-desc" data-i18n="version">Version 2.0 — Built with ❤️</div>
-                        <div class="setting-desc" style="margin-top:8px;" data-i18n="about_desc">Stream sources are provided by third-party services. CineVault does not host any content.</div>
+                        <div class="setting-desc" style="margin-top:8px;" data-i18n="about_desc">Stream sources are provided by third-party services. Muxio does not host any content.</div>
                     </div>
                 </div>
             </div>
@@ -2072,7 +2112,7 @@
     <!-- ===== AUTH MODAL ===== -->
     <div class="modal-overlay hidden" id="auth-modal">
         <div class="modal">
-            <button class="modal-close" onclick="closeModal()">
+            <button class="modal-close" aria-label="Close" onclick="closeModal()">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:14px;height:14px;"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
             </button>
             <div id="login-form">
@@ -2099,19 +2139,12 @@
     <div id="toast"><span id="toast-icon"></span><span id="toast-msg"></span></div>
     <div id="save-status"><div class="dot"></div><span id="save-status-text">Saving…</span></div>
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js">
-    </script>
+    <!-- Supabase loads lazily on first auth/cloud use (see getSb) -->
     <script>
-        // ─── BLOCK POPUPS ──────────────────────────────────────
+        // ─── BLOCK POPUPS (top-level only; player iframes are sandboxed) ──
         window.open = function() {
-            console.log("Popup blocked by site policy");
             return null;
         };
-        document.addEventListener('click', function(event) {
-            if (event.target.tagName === 'A' && event.target.target === '_blank') {
-                event.preventDefault();
-            }
-        }, true);
 
         // ─── TMDB ──────────────────────────────────────────────
         const TMDB_BEARER =
@@ -2120,7 +2153,25 @@
         const IMG = 'https://image.tmdb.org/t/p';
         const SB_URL = 'https://uxndtskeqcbddqvwiurd.supabase.co';
         const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV4bmR0c2tlcWNiZGRxdndpdXJkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE2NDUxNDEsImV4cCI6MjA5NzIyMTE0MX0.V2hhYxcuS7plj7NaHizab5qP7psveI85-ksKCexRIK4';
-        const sb = supabase.createClient(SB_URL, SB_KEY);
+        // Supabase client is loaded lazily so guests never download the SDK.
+        let __sbPromise = null;
+        function getSb() {
+            if (!__sbPromise) {
+                __sbPromise = new Promise((resolve, reject) => {
+                    const ready = () => {
+                        try { resolve(window.supabase.createClient(SB_URL, SB_KEY)); }
+                        catch (e) { reject(e); }
+                    };
+                    if (window.supabase) return ready();
+                    const s = document.createElement('script');
+                    s.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js';
+                    s.onload = ready;
+                    s.onerror = reject;
+                    document.head.appendChild(s);
+                });
+            }
+            return __sbPromise;
+        }
 
         // ─── SOURCES ──────────────────────────────────────────
         const SOURCES = [
@@ -2130,8 +2181,7 @@
             { 
         name: 'VidLink', 
         movie: id => `https://vidlink.pro/movie/${id}`, 
-        tv: (id, s, e) => `https://vidlink.pro/tv/${id}/${s}/${e}`,
-        anime: (id, ep, type = 'sub') => `https://vidlink.pro/anime/${id}/${ep}/${type}?fallback=true` 
+        tv: (id, s, e) => `https://vidlink.pro/tv/${id}/${s}/${e}`
     },
     { name: 'VidKing', movie: id => `https://www.vidking.net/embed/movie/${id}?color=F5A623`, tv: (id, s, e) =>
             `https://www.vidking.net/embed/tv/${id}/${s}/${e}?color=F5A623` },
@@ -2158,6 +2208,7 @@
 ];
 
         // ─── TRANSLATIONS ──────────────────────────────────────
+        let currentSourceName = '';
         const LANG = {
             en: {
                 nav_home: 'Home',
@@ -2196,14 +2247,26 @@
                 genre_thriller: 'Thriller',
                 year_label: 'Year (optional)',
                 any_year: 'Any year',
+                skip_link: 'Skip to content',
+                rating_label: 'Min. rating',
+                any_rating: 'Any rating',
                 spin_discover: '🎲 Spin & Discover',
                 my_watchlist: 'My <span>Watchlist</span>',
                 now_playing: 'Now Playing',
-                stream_source: 'Stream source:',
+                export_data: 'Export',
+                import_data: 'Import',
+                report_source: '⚠ Report',
+                toast_report_thanks: 'Thanks! Report saved.',
+                toast_exported: 'Backup exported.',
+                toast_imported: 'Backup imported.',
+                toast_import_fail: 'Invalid backup file.',
+                import_confirm: 'Import will replace your current settings, watchlist and progress. Continue?',
+                data_title: 'Your Data',
+                data_desc: 'Download or restore a backup of your settings, watchlist and progress.',
                 episodes: 'Episodes',
                 finding_stream: 'Finding the best stream…',
                 settings_title: ' <span>Settings</span>',
-                settings_desc: 'Customize your CineVault experience.',
+                settings_desc: 'Customize your Muxio experience.',
                 playback_tracking: 'Playback & Tracking',
                 progress_tracking: 'Progress Tracking',
                 progress_desc: 'Save which episode and season you\'re on. Synced across devices.',
@@ -2221,7 +2284,7 @@
                 reset: 'Reset',
                 about: 'About',
                 version: 'Version 2.0 — Built with ❤️',
-                about_desc: 'Stream sources are provided by third-party services. CineVault does not host any content.',
+                about_desc: 'Stream sources are provided by third-party services. Muxio does not host any content.',
                 my_profile: 'My Profile',
                 keep_watching: 'Keep <span>Watching</span>',
                 welcome_back: 'Welcome Back',
@@ -2287,14 +2350,27 @@
                 genre_thriller: 'Triler',
                 year_label: 'Godina (opciono)',
                 any_year: 'Bilo koja godina',
+                skip_link: 'Preskoči na sadržaj',
+                rating_label: 'Min. ocena',
+                any_rating: 'Bilo koja ocena',
                 spin_discover: '🎲 Okreni i otkrij',
                 my_watchlist: 'Moja <span>lista za gledanje</span>',
                 now_playing: 'Trenutno se prikazuje',
                 stream_source: 'Izvor strima:',
+                report_source: '⚠ Prijavi',
+                toast_report_thanks: 'Hvala! Zabeleženo.',
+                toast_exported: 'Rezervna kopija izvezena.',
+                toast_imported: 'Rezervna kopija uvezena.',
+                toast_import_fail: 'Nevažeća datoteka.',
+                import_confirm: 'Uvoz će zameniti trenutna podešavanja, listu i napredak. Nastaviti?',
+                data_title: 'Moji podaci',
+                data_desc: 'Preuzmite ili vratite rezervnu kopiju podešavanja, liste i napretka.',
+                export_data: 'Izvezi',
+                import_data: 'Uvezi',
                 episodes: 'Epizode',
                 finding_stream: 'Tražimo najbolji strim…',
                 settings_title: ' <span>Podešavanja</span>',
-                settings_desc: 'Prilagodite svoje CineVault iskustvo.',
+                settings_desc: 'Prilagodite svoje Muxio iskustvo.',
                 playback_tracking: 'Reprodukcija i praćenje',
                 progress_tracking: 'Praćenje napretka',
                 progress_desc: 'Čuva epizodu i sezonu na kojoj ste. Sinhronizovano na svim uređajima.',
@@ -2312,7 +2388,7 @@
                 reset: 'Resetuj',
                 about: 'O aplikaciji',
                 version: 'Verzija 2.0 — Napravljeno sa ❤️',
-                about_desc: 'Izvori strimova su obezbeđeni od strane trećih lica. CineVault ne hostuje nikakav sadržaj.',
+                about_desc: 'Izvori strimova su obezbeđeni od strane trećih lica. Muxio ne hostuje nikakav sadržaj.',
                 my_profile: 'Moj profil',
                 keep_watching: 'Nastavi da <span>gledaš</span>',
                 welcome_back: 'Dobrodošli nazad',
@@ -2501,9 +2577,47 @@
         }
 
         function updateDefaultSource(val) {
-            settings.defaultSource = parseInt(val);
+            settings.defaultSource = Math.max(0, Math.min(parseInt(val) || 0, SOURCES.length - 1));
             saveSettings();
             toast(t('toast_default_source'));
+        }
+
+        function exportUserData() {
+            const data = { app: 'muxio', version: 1, exportedAt: new Date().toISOString(), settings,
+                lang: (typeof currentLang !== 'undefined' ? currentLang : 'en'),
+                watchlist: localWatchlist, progress: localProgress };
+            const blob = new Blob([JSON.stringify(data)], { type: 'application/json' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = 'muxio-backup.json';
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            setTimeout(() => URL.revokeObjectURL(a.href), 5000);
+            toast(t('toast_exported'));
+        }
+
+        function importUserData(ev) {
+            const f = ev.target.files && ev.target.files[0];
+            if (!f) return;
+            const rd = new FileReader();
+            rd.onload = () => {
+                try {
+                    const d = JSON.parse(rd.result);
+                    if (!d || typeof d !== 'object' || !d.settings) throw new Error('bad backup');
+                    if (!confirm(t('import_confirm'))) return;
+                    settings = { ...DEFAULT_SETTINGS, ...d.settings };
+                    saveSettings();
+                    if (Array.isArray(d.watchlist)) { localWatchlist = d.watchlist; saveLocalWatchlistState(); }
+                    if (d.progress && typeof d.progress === 'object') { localProgress = d.progress; saveLocalProgressState(); }
+                    if (d.lang === 'en' || d.lang === 'sr') setLanguage(d.lang, true);
+                    updateSettingsUI();
+                    renderContinueWatching();
+                    toast(t('toast_imported'));
+                } catch (e) { toast(t('toast_import_fail'), 'error'); }
+                ev.target.value = '';
+            };
+            rd.readAsText(f);
         }
 
         function updateSettingsUI() {
@@ -2512,7 +2626,10 @@
                 if (el) el.classList.toggle('active', settings[key]);
             });
             const sel = document.getElementById('default-source-select');
-            if (sel) sel.value = settings.defaultSource;
+            if (sel) {
+                sel.innerHTML = SOURCES.map((s, i) => `<option value="${i}">${s.name}</option>`).join('');
+                sel.value = Math.max(0, Math.min(settings.defaultSource || 0, SOURCES.length - 1));
+            }
         }
 
         function clearWatchHistory() {
@@ -2522,7 +2639,7 @@
             renderContinueWatching();
             // Also clear from Supabase
             if (currentUser) {
-                sb.from('progress').delete().eq('user_id', currentUser.id).then(() => {
+                getSb().then(s => s.from('progress').delete().eq('user_id', currentUser.id)).then(() => {
                     toast(t('toast_history_cleared'));
                 }).catch(() => {});
             } else {
@@ -2641,7 +2758,8 @@
                 setLanguage(storedLang, true);
                 document.getElementById('lang-picker-overlay').classList.add('hidden');
             } else {
-                document.getElementById('lang-picker-overlay').classList.remove('hidden');
+                // Default to English silently instead of blocking first visit.
+                document.getElementById('lang-picker-overlay').classList.add('hidden');
                 currentLang = 'en';
                 applyTranslations();
                 updateLangUI();
@@ -2651,7 +2769,7 @@
             loadLocalWatchlistState();
 
             try {
-                const { data: { session } } = await sb.auth.getSession();
+                const { data: { session } } = await (await getSb()).auth.getSession();
                 if (session?.user) {
                     await onSignIn(session.user);
                 } else {
@@ -2704,7 +2822,7 @@
             btn.textContent = 'Loading…';
             btn.disabled = true;
             if (authMode === 'login') {
-                const { data, error } = await sb.auth.signInWithPassword({ email, password: pass });
+                const { data, error } = await (await getSb()).auth.signInWithPassword({ email, password: pass });
                 if (error) { err.textContent = error.message;
                     btn.textContent = t('sign_in');
                     btn.disabled = false; return; }
@@ -2712,7 +2830,7 @@
                 closeModal();
                 toast(t('toast_signed_in'));
             } else {
-                const { data, error } = await sb.auth.signUp({ email, password: pass });
+                const { data, error } = await (await getSb()).auth.signUp({ email, password: pass });
                 btn.textContent = 'Sign Up';
                 btn.disabled = false;
                 if (error) { err.textContent = error.message; return; }
@@ -2809,7 +2927,7 @@
                 const controller = new AbortController();
                 const timeoutId = setTimeout(() => controller.abort(), 5000);
 
-                const { error } = await sb.from('progress').upsert(
+                const { error } = await (await getSb()).from('progress').upsert(
                     buildProgressPayload(payload), { onConflict: 'user_id,media_type,tmdb_id' }
                 );
 
@@ -2844,8 +2962,8 @@
                 wl = [];
             try {
                 const [pRes, wRes] = await Promise.all([
-                    sb.from('progress').select('*').eq('user_id', currentUser.id),
-                    sb.from('watchlist').select('*').eq('user_id', currentUser.id)
+                    (await getSb()).from('progress').select('*').eq('user_id', currentUser.id),
+                    (await getSb()).from('watchlist').select('*').eq('user_id', currentUser.id)
                 ]);
                 prg = pRes.data || [];
                 wl = wRes.data || [];
@@ -2867,7 +2985,7 @@
                     // local is newer, push to cloud
                     cloudP[key] = local;
                     try {
-                        await sb.from('progress').upsert(buildProgressPayload(local), { onConflict: 'user_id,media_type,tmdb_id' });
+                        await (await getSb()).from('progress').upsert(buildProgressPayload(local), { onConflict: 'user_id,media_type,tmdb_id' });
                     } catch (e) {}
                 }
             }
@@ -2882,7 +3000,7 @@
                     const payload = { user_id: currentUser.id, tmdb_id: String(item.tmdb_id), media_type: item.media_type,
                         item_data: item.item_data };
                     try {
-                        const { data } = await sb.from('watchlist').insert(payload).select().single();
+                        const { data } = await (await getSb()).from('watchlist').insert(payload).select().single();
                         if (data) wl.push(data);
                     } catch (e) {}
                 }
@@ -2921,7 +3039,7 @@
 
         // ─── LOGOUT ────────────────────────────────────────────
         async function logout() {
-            try { await sb.auth.signOut(); } catch (e) {}
+            try { await (await getSb()).auth.signOut(); } catch (e) {}
             currentUser = null;
             loadLocalProgressState();
             loadLocalWatchlistState();
@@ -2972,6 +3090,13 @@
 
         // ─── TMDB ──────────────────────────────────────────────
         async function tmdb(path, params = {}) {
+            // Prefer the same-origin Netlify proxy (keeps the API key server-side + caches).
+            // Falls back to direct TMDB calls on hosts without the function (e.g. GitHub Pages).
+            try {
+                const qs = new URLSearchParams({ path, ...params }).toString();
+                const pr = await fetch(`/.netlify/functions/tmdb?${qs}`);
+                if (pr.ok) return pr.json();
+            } catch (e) {}
             const url = new URL(`${TMDB}${path}`);
             Object.entries(params).forEach(([k, v]) => url.searchParams.set(k, v));
             try {
@@ -3215,6 +3340,7 @@
               <img class="card-img" src="${poster}" alt="${title}" loading="lazy">
               <button class="watchlist-btn ${inWatchlist ? 'added' : ''}" 
                       onclick="event.stopPropagation(); toggleWatchlistFromCard(${esc}, this)" 
+                      aria-label="${inWatchlist ? 'Remove from watchlist' : 'Add to watchlist'}"
                       title="${inWatchlist ? 'Remove from watchlist' : 'Add to watchlist'}">
                 ${inWatchlist ? '✓' : '+'}
               </button>
@@ -3262,8 +3388,8 @@
                 const key = `${r.media_type}_${r.tmdb_id}`;
                 const esc = JSON.stringify({ ...item, media_type: r.media_type }).replace(/"/g, '&quot;');
                 return `<div class="continue-card">
-              <img class="continue-img" src="${banner}" alt="${title}">
-              <button class="continue-remove" onclick="removeProgressRecord(event,'${key}')">
+              <img class="continue-img" src="${banner}" alt="${title}" loading="lazy">
+              <button class="continue-remove" aria-label="Remove from history" onclick="removeProgressRecord(event,'${key}')">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:10px;height:10px;"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
               </button>
               <div class="continue-info" onclick="goToItem(${esc})">
@@ -3282,7 +3408,7 @@
             saveLocalProgressState();
             renderContinueWatching();
             if (currentUser) {
-                try { await sb.from('progress').delete().eq('user_id', currentUser.id).eq('media_type', r.media_type).eq(
+                try { await (await getSb()).from('progress').delete().eq('user_id', currentUser.id).eq('media_type', r.media_type).eq(
                         'tmdb_id', String(r.tmdb_id)); } catch (e) {}
             }
             toast(t('toast_removed_history'));
@@ -3327,6 +3453,7 @@
             const media = document.getElementById('roulette-media').value;
             const genre = document.getElementById('roulette-genre').value;
             const year = document.getElementById('roulette-year').value.trim();
+            const minRating = document.getElementById('roulette-rating').value;
             const btn = document.getElementById('spin-button');
             const ldr = document.getElementById('roulette-loader');
             const card = document.getElementById('roulette-result-card');
@@ -3350,6 +3477,7 @@
             if (adjustedGenre !== 'any') params.with_genres = adjustedGenre;
             if (year) { if (targetType === 'movie') params.primary_release_year = year;
                 else params.first_air_date_year = year; }
+            if (minRating !== 'any') params['vote_average.gte'] = minRating;
 
             const indexSet = await tmdb(`/discover/${targetType}`, params);
             if (!indexSet?.results?.length) {
@@ -3460,7 +3588,7 @@
 
         function mountStreamingSources(type, id, s, e) {
             const box = document.getElementById('source-buttons');
-            const defaultIdx = settings.defaultSource || 0;
+            const defaultIdx = Math.max(0, Math.min(settings.defaultSource || 0, SOURCES.length - 1));
             box.innerHTML = SOURCES.map((src, i) =>
                 `<button class="source-btn ${i === defaultIdx ? 'active' : ''}" onclick="firePlayerSource(${i},'${type}',${id},${s},${e})">${src.name}</button>`
                 ).join('');
@@ -3468,14 +3596,30 @@
         }
 
         function firePlayerSource(idx, type, id, s, e) {
-            document.querySelectorAll('.source-btn').forEach((b, i) => b.classList.toggle('active', i === idx));
+            document.querySelectorAll('#source-buttons .source-btn').forEach((b, i) => b.classList.toggle('active', i === idx));
             const src = SOURCES[idx];
+            if (!src) return;
             const url = type === 'movie' ? src.movie(id) : src.tv(id, s, e);
+            const loader = document.getElementById('video-loader');
+            loader.style.display = 'flex';
             const iframe = document.getElementById('player-iframe');
+            iframe.onload = () => loader.style.display = 'none';
             iframe.src = url;
             document.getElementById('player-subheading').textContent = `Source: ${src.name}`;
-            setTimeout(() => document.getElementById('video-loader').style.display = 'none', 800);
-            iframe.onload = () => document.getElementById('video-loader').style.display = 'none';
+            currentSourceName = src.name;
+            clearTimeout(window.__loaderFailsafe);
+            window.__loaderFailsafe = setTimeout(() => loader.style.display = 'none', 15000);
+        }
+
+        function reportDeadSource() {
+            try {
+                const reps = JSON.parse(localStorage.getItem('muxio_reports') || '[]');
+                reps.push({ source: currentSourceName || 'unknown',
+                    at: new Date().toISOString(),
+                    item: currentItem ? `${currentItem.media_type || ''}:${currentItem.id || ''}` : '' });
+                localStorage.setItem('muxio_reports', JSON.stringify(reps.slice(-100)));
+            } catch (e) {}
+            toast(t('toast_report_thanks'));
         }
 
         async function populateSeasons(info, startSeason, startEpisode) {
@@ -3554,13 +3698,16 @@
                 localWatchlist.splice(idx, 1);
                 saveLocalWatchlistState();
                 toast(t('toast_removed_watchlist'));
-                const uid = currentUser?.id || 'guest';
-                try {
-                    if (entry.id && !String(entry.id).startsWith('guest_'))
-                        await sb.from('watchlist').delete().eq('id', entry.id);
-                    else
-                        await sb.from('watchlist').delete().eq('user_id', uid).eq('tmdb_id', String(item.id));
-                } catch (e) {}
+                // Cloud sync is for signed-in users only; guests stay local.
+                if (currentUser) {
+                    const uid = currentUser.id;
+                    try {
+                        if (entry.id && !String(entry.id).startsWith('guest_'))
+                            await (await getSb()).from('watchlist').delete().eq('id', entry.id);
+                        else
+                            await (await getSb()).from('watchlist').delete().eq('user_id', uid).eq('tmdb_id', String(item.id));
+                    } catch (e) {}
+                }
             } else {
                 const payload = { user_id: currentUser?.id || 'guest', tmdb_id: String(item.id), media_type: type,
                     item_data: item };
@@ -3568,16 +3715,19 @@
                 const tempId = 'guest_' + Math.random().toString(36).substring(2, 12);
                 localWatchlist.push({ ...payload, id: tempId });
                 saveLocalWatchlistState();
-                try {
-                    const { data, error } = await sb.from('watchlist').insert({ user_id: payload.user_id,
-                        tmdb_id: payload.tmdb_id, media_type: payload.media_type,
-                        item_data: payload.item_data }).select().single();
-                    if (data) {
-                        const i = localWatchlist.findIndex(x => x.id === tempId);
-                        if (i > -1) { localWatchlist[i] = data;
-                            saveLocalWatchlistState(); }
-                    }
-                } catch (e) {}
+                // Cloud sync is for signed-in users only; guests stay local.
+                if (currentUser) {
+                    try {
+                        const { data, error } = await (await getSb()).from('watchlist').insert({ user_id: payload.user_id,
+                            tmdb_id: payload.tmdb_id, media_type: payload.media_type,
+                            item_data: payload.item_data }).select().single();
+                        if (data) {
+                            const i = localWatchlist.findIndex(x => x.id === tempId);
+                            if (i > -1) { localWatchlist[i] = data;
+                                saveLocalWatchlistState(); }
+                        }
+                    } catch (e) {}
+                }
             }
         }
 

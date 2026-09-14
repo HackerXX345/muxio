@@ -1,0 +1,1 @@
+{"background_color": "#08091A", "description": "Discover movies and series, track your watchlist and continue watching.", "display": "standalone", "icons": [{"purpose": "any", "sizes": "512x512", "src": "muxio_icon_v2.png", "type": "image/png"}], "name": "Muxio", "short_name": "Muxio", "start_url": ".", "theme_color": "#08091A"}
