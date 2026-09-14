@@ -2515,8 +2515,8 @@
             box-shadow: 0 0 0 3px rgba(220, 165, 67, 0.15);
         }
 
-        /* text inputs: auth + search */
-        .form-input, .search-bar input {
+        /* text inputs: auth */
+        .form-input {
             min-height: 44px;
             border-radius: var(--r-md);
             border: 1px solid rgba(255, 255, 255, 0.09);
@@ -2524,13 +2524,27 @@
             color: var(--text);
             transition: border-color 0.2s, box-shadow 0.2s;
         }
-        .form-input:focus, .search-bar input:focus {
+        .form-input:focus {
             border-color: var(--gold);
             outline: none;
             box-shadow: 0 0 0 3px rgba(220, 165, 67, 0.15);
         }
-        .search-bar input {
+        /* search stays a single pill: style the wrapper, keep the input bare */
+        .search-bar {
+            min-height: 44px;
+            height: auto;
             border-radius: 999px;
+            border: 1px solid rgba(255, 255, 255, 0.09);
+            padding: 0 16px;
+        }
+        .search-bar:focus-within {
+            border-color: var(--gold);
+            box-shadow: 0 0 0 3px rgba(220, 165, 67, 0.15);
+        }
+        .search-bar input:focus {
+            border: none;
+            outline: none;
+            box-shadow: none;
         }
     </style>
 </head>
