@@ -2429,6 +2429,102 @@
             box-shadow: var(--shadow);
             overflow: hidden;
         }
+
+        /* ═══ MUXIO V3b — no naked controls, no emoji ═══ */
+        /* language code pills (replace flag emoji) */
+        .flag-code {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 30px;
+            height: 22px;
+            padding: 0 7px;
+            border-radius: 7px;
+            background: var(--surface3);
+            border: var(--border);
+            color: var(--gold2);
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 0.8px;
+        }
+        .lang-picker-box .icon {
+            display: flex;
+            justify-content: center;
+            color: var(--gold);
+        }
+        .empty-icon {
+            display: flex;
+            justify-content: center;
+            color: var(--muted);
+            margin-bottom: 14px;
+        }
+
+        /* fully-skinned selects: custom chevron, no native arrow */
+        .premium-select, .settings-select, .season-select-premium {
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            background-color: var(--surface2);
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23DCA543' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            background-size: 15px;
+            padding-right: 38px !important;
+            cursor: pointer;
+            min-height: 44px;
+            border-radius: var(--r-md);
+            border: 1px solid rgba(255, 255, 255, 0.09);
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .premium-select:hover, .settings-select:hover, .season-select-premium:hover {
+            border-color: rgba(220, 165, 67, 0.5);
+        }
+        .premium-select:focus, .settings-select:focus, .season-select-premium:focus {
+            border-color: var(--gold);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(220, 165, 67, 0.15);
+        }
+        .premium-select option, .settings-select option, .season-select-premium option {
+            background: var(--surface2);
+            color: var(--text);
+        }
+
+        /* number inputs: no spinners, clean field */
+        .premium-input[type="number"] {
+            -moz-appearance: textfield;
+            appearance: textfield;
+            min-height: 44px;
+            border-radius: var(--r-md);
+            border: 1px solid rgba(255, 255, 255, 0.09);
+        }
+        .premium-input[type="number"]::-webkit-outer-spin-button,
+        .premium-input[type="number"]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        .premium-input:focus {
+            border-color: var(--gold);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(220, 165, 67, 0.15);
+        }
+
+        /* text inputs: auth + search */
+        .form-input, .search-bar input {
+            min-height: 44px;
+            border-radius: var(--r-md);
+            border: 1px solid rgba(255, 255, 255, 0.09);
+            background: var(--surface);
+            color: var(--text);
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .form-input:focus, .search-bar input:focus {
+            border-color: var(--gold);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(220, 165, 67, 0.15);
+        }
+        .search-bar input {
+            border-radius: 999px;
+        }
     </style>
 </head>
 <body>
@@ -2438,16 +2534,16 @@
     <!-- ===== LANGUAGE PICKER (first visit) ===== -->
     <div id="lang-picker-overlay">
         <div class="lang-picker-box">
-            <div class="icon">🌍</div>
+            <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="width:40px;height:40px;"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.7 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.7-3.8-9S9.5 5.6 12 3z"/></svg></div>
             <h2>Choose your language</h2>
             <p>English is on by default — switch anytime.</p>
             <div class="lang-picker-options">
                 <button class="lang-picker-btn" onclick="pickLanguage('en')">
-                    <span class="flag">🇬🇧</span>
+                    <span class="flag-code">EN</span>
                     <span class="label">English</span>
                 </button>
                 <button class="lang-picker-btn" onclick="pickLanguage('sr')">
-                    <span class="flag">🇷🇸</span>
+                    <span class="flag-code">SR</span>
                     <span class="label">Srpski</span>
                 </button>
             </div>
@@ -2459,7 +2555,7 @@
         <a class="logo" href="#/home" id="logo-link"><span id="logo-brand">Mux</span>io</a>
         <div class="nav-links">
             <button class="nav-link active" data-i18n="nav_home" onclick="navigateTo('home')">Home</button>
-            <button class="nav-link nav-roulette-btn" data-i18n="nav_roulette" onclick="navigateTo('roulette')">🎲 Roulette</button>
+            <button class="nav-link nav-roulette-btn" data-i18n="nav_roulette" onclick="navigateTo('roulette')">Roulette</button>
             <button class="nav-link" data-i18n="nav_watchlist" onclick="navigateTo('watchlist')">Watchlist</button>
         </div>
         <div class="search-bar">
@@ -2470,15 +2566,15 @@
             <!-- language dropdown -->
             <div class="lang-dropdown" id="lang-dropdown">
                 <button class="lang-dropdown-btn" id="lang-dropdown-btn" onclick="toggleLangDropdown()">
-                    <span id="lang-current-label">🇬🇧 EN</span>
+                    <span id="lang-current-label">EN</span>
                     <span class="arrow">▾</span>
                 </button>
                 <div class="lang-dropdown-menu" id="lang-dropdown-menu">
                     <button class="lang-option" data-lang="en" onclick="selectLanguage('en')">
-                        <span class="flag">🇬🇧</span> English
+                        <span class="flag-code">EN</span> English
                     </button>
                     <button class="lang-option" data-lang="sr" onclick="selectLanguage('sr')">
-                        <span class="flag">🇷🇸</span> Srpski
+                        <span class="flag-code">SR</span> Srpski
                     </button>
                 </div>
             </div>
@@ -2600,7 +2696,7 @@
     <div id="roulette-page" class="page">
         <div class="roulette-container">
             <div class="section-header" style="margin-bottom:8px;">
-                <div class="section-title" data-i18n="cinema_roulette">🎲 Cinema <span>Roulette</span></div>
+                <div class="section-title" data-i18n="cinema_roulette">Cinema <span>Roulette</span></div>
             </div>
             <p style="color:var(--muted);font-size:14px;margin-bottom:24px;" data-i18n="roulette_desc">Not sure what to watch? Set your filters and we'll pick something for you.</p>
             <div class="bento-box">
@@ -2643,7 +2739,7 @@
                     </div>
                 </div>
                 <button class="spin-action-btn" id="spin-button" onclick="spinRoulette()">
-                    <span data-i18n="spin_discover">🎲 Spin & Discover</span>
+                    <span data-i18n="spin_discover">Spin & Discover</span>
                 </button>
             </div>
             <div id="roulette-loader" class="loader" style="display:none;"><div class="spinner"></div></div>
@@ -2687,7 +2783,7 @@
                         <button class="src-nav" onclick="stepSource(1)" data-i18n-aria="source_next" aria-label="Next source" title="Next source">›</button>
                         <button class="src-tool" onclick="retrySource()" data-i18n-aria="source_retry" aria-label="Reload source" title="Reload">↻</button>
                         <button class="src-tool" onclick="openSourceTab()" data-i18n-aria="source_tab" aria-label="Open in new tab" title="Open in new tab">↗</button>
-                        <button class="src-tool src-report" id="report-btn" onclick="reportDeadSource()" data-i18n="report_source" title="Report dead source">⚠ <span data-i18n="report">Report</span></button>
+                        <button class="src-tool src-report" id="report-btn" onclick="reportDeadSource()" data-i18n="report_source" title="Report dead source"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px;"><path d="M12 3 2.5 20h19L12 3z" stroke-linejoin="round"/><line x1="12" y1="9" x2="12" y2="13.5" stroke-linecap="round"/><circle cx="12" cy="17" r="0.6" fill="currentColor"/></svg><span data-i18n="report">Report</span></button>
                     </div>
                 </div>
                 <div id="source-buttons" class="src-strip"></div>
@@ -2821,7 +2917,7 @@
                 <div class="setting-row" style="border-bottom:none;">
                     <div>
                         <div class="setting-label">Muxio</div>
-                        <div class="setting-desc" data-i18n="version">Version 2.0 — Built with ❤️</div>
+                        <div class="setting-desc" data-i18n="version">Version 2.0 — Crafted with care.</div>
                         <div class="setting-desc" style="margin-top:8px;" data-i18n="about_desc">Stream sources are provided by third-party services. Muxio does not host any content.</div>
                     </div>
                 </div>
@@ -2930,7 +3026,7 @@
         const LANG = {
             en: {
                 nav_home: 'Home',
-                nav_roulette: '🎲 Roulette',
+                nav_roulette: 'Roulette',
                 nav_watchlist: 'Watchlist',
                 sign_in: 'Sign In',
                 sign_out: 'Sign Out',
@@ -2949,7 +3045,7 @@
                 all: 'All',
                 movies: 'Movies',
                 series: 'Series',
-                cinema_roulette: '🎲 Cinema <span>Roulette</span>',
+                cinema_roulette: 'Cinema <span>Roulette</span>',
                 roulette_desc: 'Not sure what to watch? Set your filters and we\'ll pick something for you.',
                 type_label: 'Type',
                 both: 'Movies & Series',
@@ -2970,13 +3066,13 @@
                 skip_link: 'Skip to content',
                 rating_label: 'Min. rating',
                 any_rating: 'Any rating',
-                spin_discover: '🎲 Spin & Discover',
+                spin_discover: 'Spin & Discover',
                 my_watchlist: 'My <span>Watchlist</span>',
                 now_playing: 'Now Playing',
                 stream_source: 'Stream source:',
                 export_data: 'Export',
                 import_data: 'Import',
-                report_source: '⚠ Report',
+                report_source: 'Report',
                 report: 'Report',
                 source_prev: 'Previous source',
                 source_next: 'Next source',
@@ -3010,7 +3106,7 @@
                 reset_settings_desc: 'Restore all settings to their default values.',
                 reset: 'Reset',
                 about: 'About',
-                version: 'Version 2.0 — Built with ❤️',
+                version: 'Version 2.0 — Crafted with care.',
                 about_desc: 'Stream sources are provided by third-party services. Muxio does not host any content.',
                 my_profile: 'My Profile',
                 keep_watching: 'Keep <span>Watching</span>',
@@ -3042,7 +3138,7 @@
             },
             sr: {
                 nav_home: 'Početna',
-                nav_roulette: '🎲 Rulet',
+                nav_roulette: 'Rulet',
                 nav_watchlist: 'Lista za gledanje',
                 sign_in: 'Prijava',
                 sign_out: 'Odjava',
@@ -3061,7 +3157,7 @@
                 all: 'Sve',
                 movies: 'Filmovi',
                 series: 'Serije',
-                cinema_roulette: '🎲 Bioskopski <span>rulet</span>',
+                cinema_roulette: 'Bioskopski <span>rulet</span>',
                 roulette_desc: 'Niste sigurni šta da gledate? Postavite filtere i mi ćemo izabrati nešto za vas.',
                 type_label: 'Tip',
                 both: 'Filmovi i serije',
@@ -3082,7 +3178,7 @@
                 skip_link: 'Preskoči na sadržaj',
                 rating_label: 'Min. ocena',
                 any_rating: 'Bilo koja ocena',
-                spin_discover: '🎲 Okreni i otkrij',
+                spin_discover: 'Okreni i otkrij',
                 my_watchlist: 'Moja <span>lista za gledanje</span>',
                 now_playing: 'Trenutno se prikazuje',
                 stream_source: 'Izvor strima:',
@@ -3091,7 +3187,7 @@
                 source_retry: 'Ponovo učitaj',
                 source_tab: 'Otvori u novoj kartici',
                 source_hint: 'Crn ekran ili greška? Pređi na sledeći izvor — hostovi često padaju. Dugme ↗ otvara izvor u novoj kartici.',
-                report_source: '⚠ Prijavi',
+                report_source: 'Prijavi',
                 report: 'Prijavi',
                 toast_report_thanks: 'Hvala! Zabeleženo.',
                 toast_exported: 'Rezervna kopija izvezena.',
@@ -3122,7 +3218,7 @@
                 reset_settings_desc: 'Vrati sva podešavanja na podrazumevane vrednosti.',
                 reset: 'Resetuj',
                 about: 'O aplikaciji',
-                version: 'Verzija 2.0 — Napravljeno sa ❤️',
+                version: 'Verzija 2.0 — Napravljeno s pažnj.',
                 about_desc: 'Izvori strimova su obezbeđeni od strane trećih lica. Muxio ne hostuje nikakav sadržaj.',
                 my_profile: 'Moj profil',
                 keep_watching: 'Nastavi da <span>gledaš</span>',
@@ -3237,7 +3333,7 @@
         function updateLangUI() {
             const label = document.getElementById('lang-current-label');
             if (label) {
-                label.textContent = currentLang === 'sr' ? '🇷🇸 SR' : '🇬🇧 EN';
+                label.textContent = currentLang === 'sr' ? 'SR' : 'EN';
             }
             document.querySelectorAll('.lang-option').forEach(opt => {
                 opt.classList.toggle('active-opt', opt.dataset.lang === currentLang);
@@ -3791,15 +3887,15 @@
             const dropdownHTML = `
             <div class="lang-dropdown" id="lang-dropdown">
               <button class="lang-dropdown-btn" id="lang-dropdown-btn" onclick="toggleLangDropdown()">
-                <span id="lang-current-label">${currentLang === 'sr' ? '🇷🇸 SR' : '🇬🇧 EN'}</span>
+                <span id="lang-current-label">${currentLang === 'sr' ? 'SR' : 'EN'}</span>
                 <span class="arrow">▾</span>
               </button>
               <div class="lang-dropdown-menu" id="lang-dropdown-menu">
                 <button class="lang-option ${currentLang === 'en' ? 'active-opt' : ''}" data-lang="en" onclick="selectLanguage('en')">
-                  <span class="flag">🇬🇧</span> English
+                  <span class="flag-code">EN</span> English
                 </button>
                 <button class="lang-option ${currentLang === 'sr' ? 'active-opt' : ''}" data-lang="sr" onclick="selectLanguage('sr')">
-                  <span class="flag">🇷🇸</span> Srpski
+                  <span class="flag-code">SR</span> Srpski
                 </button>
               </div>
             </div>
@@ -3809,10 +3905,10 @@
                 nr.innerHTML = dropdownHTML + `
               <div class="avatar" onclick="toggleDeskMenu()">${init}
                 <div class="avatar-menu" id="avatar-menu">
-                  <div class="avatar-item" onclick="navigateTo('profile')">👤 ${t('my_profile')}</div>
-                  <div class="avatar-item" onclick="navigateTo('watchlist')">🔖 ${t('nav_watchlist')}</div>
-                  <div class="avatar-item" onclick="navigateTo('settings')">⚙️ ${t('settings_title').replace(/<[^>]*>/g,'')}</div>
-                  <div class="avatar-item danger" onclick="logout()">🚪 ${t('sign_out')}</div>
+                  <div class="avatar-item" onclick="navigateTo('profile')">${t('my_profile')}</div>
+                  <div class="avatar-item" onclick="navigateTo('watchlist')">${t('nav_watchlist')}</div>
+                  <div class="avatar-item" onclick="navigateTo('settings')">${t('settings_title').replace(/<[^>]*>/g,'')}</div>
+                  <div class="avatar-item danger" onclick="logout()">${t('sign_out')}</div>
                 </div>
               </div>`;
             } else {
@@ -4225,7 +4321,7 @@
             const indexSet = await tmdb(`/discover/${targetType}`, params);
             if (!indexSet?.results?.length) {
                 btn.disabled = false;
-                btn.textContent = '🎲 Spin & Discover';
+                btn.textContent = t('spin_discover');
                 ldr.style.display = 'none';
                 toast(t('toast_no_results'), 'error');
                 return;
@@ -4255,7 +4351,7 @@
 
             function revealWinner() {
                 btn.disabled = false;
-                btn.textContent = '🎲 Spin & Discover';
+                btn.textContent = t('spin_discover');
                 const title = finalItem.title || finalItem.name;
                 const year2 = (finalItem.release_date || finalItem.first_air_date || '').split('-')[0];
                 const poster = finalItem.poster_path ? `${IMG}/w300${finalItem.poster_path}` :
@@ -4297,7 +4393,7 @@
 
             const year = (info.release_date || info.first_air_date || '').split('-')[0];
             document.getElementById('player-meta').innerHTML = `
-            <span class="badge badge-gold">⭐ ${info.vote_average?.toFixed(1) || 'N/A'}</span>
+            <span class="badge badge-gold"><svg viewBox="0 0 24 24" fill="currentColor" style="width:11px;height:11px;"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg> ${info.vote_average?.toFixed(1) || 'N/A'}</span>
             <span class="badge">${year}</span>
             ${type === 'movie' && info.runtime ? `<span class="badge">${info.runtime} min</span>` : ''}`;
 
@@ -4519,7 +4615,7 @@
             const c = document.getElementById('watchlist-grid');
             if (!localWatchlist.length) {
                 c.innerHTML =
-                    `<div class="empty-state" style="grid-column:1/-1;"><div class="empty-icon">🔖</div><div class="empty-title">${t('my_watchlist').replace(/<[^>]*>/g,'')}</div><div class="empty-desc">Browse titles and click <strong>+ Watchlist</strong> to save them here.</div></div>`;
+                    `<div class="empty-state" style="grid-column:1/-1;"><div class="empty-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="width:30px;height:30px;"><path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4-7 4V4a1 1 0 0 1 1-1z" stroke-linejoin="round"/></svg></div><div class="empty-title">${t('my_watchlist').replace(/<[^>]*>/g,'')}</div><div class="empty-desc">Browse titles and click <strong>+ Watchlist</strong> to save them here.</div></div>`;
                 return;
             }
             c.innerHTML = localWatchlist.map(w => generateCardHTML(w.item_data, w.media_type)).join('');
